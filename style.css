@@ -1,0 +1,278 @@
+/* style.css */
+
+/* Fonte divertida e amigável */
+body {
+    font-family: 'Fredoka', cursive, sans-serif;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    margin: 0;
+    padding: 0;
+    color: #333;
+    user-select: none;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px 20px 40px 20px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  
+  /* Cabeçalhos */
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    color: #4a148c;
+    text-shadow: 1px 1px 3px #c1a0d7;
+  }
+  
+  h2, h3, h4 {
+    color: #3b1f6b;
+    margin-bottom: 12px;
+  }
+  
+  /* Tela inicial */
+  #start-screen input {
+    font-size: 1.1rem;
+    padding: 10px;
+    margin: 10px 8px;
+    width: 220px;
+    border: 2px solid #7e57c2;
+    border-radius: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  #start-screen input:focus {
+    border-color: #5e35b1;
+  }
+  
+  #start-btn {
+    background: #7e57c2;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(126, 87, 194, 0.5);
+    transition: background-color 0.3s ease;
+  }
+  
+  #start-btn:hover {
+    background: #5e35b1;
+  }
+  
+  /* Tela de jogo */
+  
+  #turn-indicator {
+    font-size: 1.6rem;
+    margin-bottom: 18px;
+    font-weight: 700;
+    color: #2e7d32;
+  }
+  
+  /* Cartas */
+  
+  #cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: #f3e5f5;
+    border-radius: 20px;
+    padding: 18px 22px;
+    width: 280px;
+    box-shadow: 0 6px 12px rgba(142, 36, 170, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(142, 36, 170, 0.4);
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #6a1b9a;
+  }
+  
+  .card-description {
+    font-size: 1rem;
+    color: #4a148c;
+    line-height: 1.3;
+  }
+  
+  /* Caixa de explicação */
+  
+  #explanation-box {
+    background: #e1bee7;
+    border-radius: 15px;
+    padding: 18px 25px;
+    max-width: 650px;
+    margin: 0 auto 30px auto;
+    color: #4a148c;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 18px rgba(156, 39, 176, 0.35);
+  }
+  
+  #explanation-box button {
+    background: #7e57c2;
+    border: none;
+    padding: 10px 28px;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    border-radius: 16px;
+    margin-top: 15px;
+    box-shadow: 0 5px 14px rgba(126, 87, 194, 0.5);
+    transition: background-color 0.3s ease;
+  }
+  
+  #explanation-box button:hover {
+    background: #5e35b1;
+  }
+  
+  /* Trilhas dos jogadores */
+  
+  .trails {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .trail-container {
+    background: #ede7f6;
+    border-radius: 20px;
+    padding: 15px;
+    width: 42%;
+    box-shadow: 0 6px 12px rgba(81, 45, 168, 0.15);
+  }
+  
+  .trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    padding: 10px 5px;
+    min-height: 50px;
+    background: #d1c4e9;
+    border-radius: 15px;
+    box-shadow: inset 0 3px 6px rgba(121, 81, 157, 0.4);
+  }
+  
+  /* Cada passo da trilha */
+  
+  .trail-step {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.15);
+  }
+  
+  /* Cores conforme o impacto */
+  
+  .step-3 {
+    background: #2e7d32; /* verde escuro */
+  }
+  
+  .step-2 {
+    background: #66bb6a; /* verde claro */
+  }
+  
+  .step-1 {
+    background: #aed581; /* verde amarelado */
+  }
+  
+  .step0 {
+    background: #9e9e9e; /* cinza neutro */
+  }
+  
+  .step-1-neg {
+    background: #ffb74d; /* amarelo alaranjado */
+  }
+  
+  .step-2-neg {
+    background: #f57c00; /* laranja escuro */
+  }
+  
+  .step-3-neg {
+    background: #d84315; /* vermelho escuro */
+  }
+  
+  /* Final do jogo */
+  
+  #end-screen {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .final-trails {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0 35px 0;
+    flex-wrap: wrap;
+  }
+  
+  .final-trails > div {
+    width: 40%;
+    background: #ede7f6;
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 6px 12px rgba(81, 45, 168, 0.15);
+  }
+  
+  #final-trail-1, #final-trail-2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    padding: 10px;
+    min-height: 55px;
+    background: #d1c4e9;
+    border-radius: 14px;
+    box-shadow: inset 0 3px 6px rgba(121, 81, 157, 0.4);
+  }
+  
+  /* Utility classes */
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Responsividade simples */
+  
+  @media (max-width: 700px) {
+    .card {
+      width: 90%;
+    }
+  
+    .trails, .final-trails {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .trail-container, .final-trails > div {
+      width: 90%;
+    }
+  }
+  

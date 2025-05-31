@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Trilha do Expossoma</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Trilha do Expossoma: Desafio em Dupla!</h1>
+
+    <div id="start-screen">
+      <input type="text" id="player1-name" placeholder="Nome do Jogador 1">
+      <input type="text" id="player2-name" placeholder="Nome do Jogador 2">
+      <button id="start-btn">Começar Jogo</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+      <h2 id="turn-indicator">Vez de: Jogador</h2>
+
+      <div id="cards-container">
+        <div class="card" id="option1" onclick="chooseOption(0)">
+          <h3 class="card-title"></h3>
+          <p class="card-description"></p>
+        </div>
+        <div class="card" id="option2" onclick="chooseOption(1)">
+          <h3 class="card-title"></h3>
+          <p class="card-description"></p>
+        </div>
+      </div>
+
+      <div id="explanation-box" class="hidden">
+        <p id="explanation-text"></p>
+        <button onclick="nextTurn()">Próxima Rodada</button>
+      </div>
+
+      <div class="trails">
+        <div class="trail-container">
+          <h3 id="trail-name-1"></h3>
+          <div class="trail" id="trail1"></div>
+        </div>
+        <div class="trail-container">
+          <h3 id="trail-name-2"></h3>
+          <div class="trail" id="trail2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="end-screen" class="hidden">
+      <h2>Fim do Jogo!</h2>
+      <p id="result-text"></p>
+      <div class="final-trails">
+        <div>
+          <h4 id="final-name-1"></h4>
+          <div id="final-trail-1"></div>
+        </div>
+        <div>
+          <h4 id="final-name-2"></h4>
+          <div id="final-trail-2"></div>
+        </div>
+      </div>
+      <button onclick="location.reload()">Jogar Novamente</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
