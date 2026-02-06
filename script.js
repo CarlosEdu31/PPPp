@@ -327,6 +327,7 @@ function renderMonthlyChart() {
   });
 }
 
+
 /*********************************
  * RENDER GERAL
  *********************************/
@@ -337,9 +338,55 @@ function renderAll() {
   renderCharts();
 }
 
+document.getElementById("exportBackup").addEventListener("click", () => {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "controle-financeiro-backup.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("importBackup").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    try {
+      const importedState = JSON.parse(event.target.result);
+
+      if (!importedState.categories || !importedState.transactions) {
+        alert("Arquivo inválido");
+        return;
+      }
+
+      state = importedState;
+      saveStorage();
+      renderAll();
+
+      alert("Backup restaurado com sucesso!");
+    } catch {
+      alert("Erro ao importar backup");
+    }
+  };
+
+  reader.readAsText(file);
+});
+
+
 /*********************************
  * INIT
  *********************************/
 loadStorage();
 applyDarkMode();
 renderAll();
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}

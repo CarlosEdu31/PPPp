@@ -229,3 +229,11 @@ body.dark tbody tr:nth-child(even) {
     grid-column: span 1;
   }
 }
+
+.backup {
+  padding: 20px;
+}
+
+.backup button {
+  margin-right: 10px;
+}

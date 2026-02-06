@@ -10,6 +10,16 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#4f46e5">
+
+<!-- iOS específico -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Controle Financeiro">
+
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 
@@ -140,7 +150,19 @@
       </tbody>
     </table>
   </section>
-
+  
+  <section class="backup">
+    <h2>Backup</h2>
+  
+    <button id="exportBackup">Exportar Backup</button>
+  
+    <input 
+      type="file" 
+      id="importBackup" 
+      accept=".json"
+    />
+  </section>
+  
   <!-- FOOTER -->
   <footer class="footer">
     <p>📊 Controle Financeiro • LocalStorage • GitHub Pages</p>
