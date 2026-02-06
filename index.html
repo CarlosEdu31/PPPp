@@ -3,139 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>Controle Financeiro</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS será conectado depois -->
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- CSS (vamos melhorar depois) -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <h1>Controle Financeiro</h1>
-        <p>Gerencie seus gastos e receitas</p>
-    </header>
+    <h1>Controle de Gastos</h1>
 
-    <!-- CONTAINER PRINCIPAL -->
-    <main class="container">
+    <!-- ================= VISÃO GERAL ================= -->
+    <section id="visaoGeral">
+        <h2>Visão Geral</h2>
 
-        <!-- RESUMO FINANCEIRO -->
-        <section class="resumo">
-            <div class="card">
-                <h3>Receitas</h3>
-                <p id="total-receitas">R$ 0,00</p>
-            </div>
+        <label for="filtroAno">Ano:</label>
+        <select id="filtroAno"></select>
 
-            <div class="card">
-                <h3>Despesas</h3>
-                <p id="total-despesas">R$ 0,00</p>
-            </div>
+        <div class="resumo">
+            <p>Entradas: R$ <span id="totalEntradas">0,00</span></p>
+            <p>Saídas: R$ <span id="totalSaidas">0,00</span></p>
+            <p>Saldo: R$ <span id="saldoFinal">0,00</span></p>
+        </div>
+    </section>
 
-            <div class="card saldo">
-                <h3>Saldo</h3>
-                <p id="saldo-total">R$ 0,00</p>
-            </div>
-        </section>
+    <!-- ================= GRÁFICOS ================= -->
+    <section id="graficos">
+        <h2>Gráficos</h2>
 
-        <!-- FORMULÁRIO DE LANÇAMENTO -->
-        <section class="formulario">
-            <h2>Novo Lançamento</h2>
+        <canvas id="graficoCategorias"></canvas>
+        <br>
+        <canvas id="graficoMensal"></canvas>
+    </section>
 
-            <form id="form-lancamento">
-                <label>
-                    Tipo
-                    <select id="tipo">
-                        <option value="receita">Receita</option>
-                        <option value="despesa">Despesa</option>
-                    </select>
-                </label>
+    <!-- ================= CATEGORIAS ================= -->
+    <section id="categorias">
+        <h2>Categorias</h2>
 
-                <label>
-                    Descrição
-                    <input type="text" id="descricao" placeholder="Ex: Aluguel, Salário" required>
-                </label>
+        <input type="text" id="novaCategoria" placeholder="Nova categoria">
+        <button id="btnAdicionarCategoria">Adicionar</button>
 
-                <label>
-                    Categoria
-                    <select id="categoria">
-                        <option value="Alimentação">Alimentação</option>
-                        <option value="Moradia">Moradia</option>
-                        <option value="Transporte">Transporte</option>
-                        <option value="Lazer">Lazer</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </label>
+        <ul id="listaCategorias"></ul>
+    </section>
 
-                <label>
-                    Valor
-                    <input type="number" id="valor" step="0.01" required>
-                </label>
+    <!-- ================= NOVO LANÇAMENTO ================= -->
+    <section id="novoLancamento">
+        <h2>Novo Lançamento</h2>
 
-                <label>
-                    Data
-                    <input type="date" id="data" required>
-                </label>
+        <input type="text" id="descricao" placeholder="Descrição">
 
-                <button type="submit">Adicionar</button>
-            </form>
-        </section>
+        <input type="number" id="valor" placeholder="Valor">
 
-        <!-- TABELA DE LANÇAMENTOS -->
-        <section class="tabela">
-            <h2>Lançamentos</h2>
+        <input type="date" id="data">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Descrição</th>
-                        <th>Categoria</th>
-                        <th>Valor</th>
-                        <th>Data</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-lancamentos">
-                    <!-- JS vai inserir os dados aqui -->
-                </tbody>
-            </table>
-        </section>
+        <select id="tipo">
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+        </select>
 
-        <!-- GRÁFICOS -->
-        <section class="graficos">
-            <h2>Visão Geral</h2>
-            <div class="grafico">
-                <canvas id="grafico-categorias"></canvas>
-            </div>
-            <div class="grafico">
-                <canvas id="grafico-mensal"></canvas>
-            </div>
-        </section>
+        <select id="categoriaLancamento"></select>
 
-        <!-- METAS FINANCEIRAS -->
-        <section class="metas">
-            <h2>Metas Financeiras</h2>
+        <label>Parcelas:</label>
+        <input type="number" id="parcelas" value="1" min="1">
 
-            <form id="form-meta">
-                <input type="text" id="meta-descricao" placeholder="Ex: Economizar para viagem">
-                <input type="number" id="meta-valor" placeholder="Valor da meta">
-                <button type="submit">Adicionar Meta</button>
-            </form>
+        <button id="btnAdicionarLancamento">Adicionar Lançamento</button>
+    </section>
 
-            <ul id="lista-metas">
-                <!-- JS vai preencher -->
-            </ul>
-        </section>
+    <!-- ================= LISTA DE LANÇAMENTOS ================= -->
+    <section id="lancamentos">
+        <h2>Lançamentos</h2>
+        <ul id="listaLancamentos"></ul>
+    </section>
 
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>© 2026 - Controle Financeiro Pessoal</p>
-    </footer>
-
-    <!-- JS será conectado depois -->
-    <script src="script.js" defer></script>
-
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
