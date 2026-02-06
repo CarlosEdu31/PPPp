@@ -7,6 +7,8 @@ let state = {
   darkMode: false
 };
 
+let editingId = null;
+
 /*********************************
  * LOCAL STORAGE
  *********************************/
@@ -113,18 +115,36 @@ transactionForm.addEventListener("submit", (e) => {
 
   if (!description || !amount || !type || !category || !date) return;
 
-  if (isRecurring) {
-    addRecurring(description, amount, type, category, date);
-  } else if (installments > 1) {
-    addInstallments(description, amount, type, category, date, installments);
+  if (editingId) {
+    // 🔁 EDITAR
+    const tx = state.transactions.find(t => t.id === editingId);
+    if (!tx) return;
+
+    tx.description = description;
+    tx.amount = amount;
+    tx.type = type;
+    tx.category = category;
+    tx.date = date;
+
+    editingId = null;
+    transactionForm.querySelector("button").textContent = "Adicionar Lançamento";
+
   } else {
-    addTransaction(description, amount, type, category, date);
+    // ➕ NOVO
+    if (isRecurring) {
+      addRecurring(description, amount, type, category, date);
+    } else if (installments > 1) {
+      addInstallments(description, amount, type, category, date, installments);
+    } else {
+      addTransaction(description, amount, type, category, date);
+    }
   }
 
   transactionForm.reset();
   saveStorage();
   renderAll();
 });
+
 
 function addTransaction(desc, amt, type, cat, date) {
   state.transactions.push({
@@ -188,6 +208,7 @@ function renderTransactions() {
       <td>${tx.type === "income" ? "Receita" : "Despesa"}</td>
       <td>${formatCurrency(tx.amount)}</td>
       <td>
+        <button class="action-btn edit" onclick="editTransaction('${tx.id}')">Editar</button>
         <button class="action-btn delete" onclick="deleteTransaction('${tx.id}')">Excluir</button>
       </td>
     `;
@@ -195,6 +216,25 @@ function renderTransactions() {
     transactionTableBody.appendChild(tr);
   });
 }
+
+function editTransaction(id) {
+  const tx = state.transactions.find(t => t.id === id);
+  if (!tx) return;
+
+  editingId = id;
+
+  document.getElementById("description").value = tx.description;
+  document.getElementById("amount").value = tx.amount;
+  document.getElementById("type").value = tx.type;
+  document.getElementById("categorySelect").value = tx.category;
+  document.getElementById("date").value = tx.date;
+
+  document.getElementById("installments").value = 1;
+  document.getElementById("isRecurring").checked = false;
+
+  transactionForm.querySelector("button").textContent = "Salvar edição";
+}
+
 
 function deleteTransaction(id) {
   state.transactions = state.transactions.filter(tx => tx.id !== id);
