@@ -1,165 +1,305 @@
-alert("JS carregado");
+/*********************************
+ * ESTADO GLOBAL
+ *********************************/
+let state = {
+  categories: [],
+  transactions: [],
+  darkMode: false
+};
 
+/*********************************
+ * LOCAL STORAGE
+ *********************************/
+const STORAGE_KEY = "controleFinanceiro_v1";
 
-document.addEventListener("DOMContentLoaded", () => {
+function saveStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
 
-  // ================= DADOS =================
-  let categorias = [];
-  let lancamentos = [];
-
-  // ================= ELEMENTOS =================
-  const listaCategorias = document.getElementById("listaCategorias");
-  const categoriaSelect = document.getElementById("categoriaLancamento");
-  const filtroAno = document.getElementById("filtroAno");
-
-  const totalEntradasEl = document.getElementById("totalEntradas");
-  const totalSaidasEl = document.getElementById("totalSaidas");
-  const saldoFinalEl = document.getElementById("saldoFinal");
-
-  const listaLancamentos = document.getElementById("listaLancamentos");
-
-  const btnCategoria = document.getElementById("btnAdicionarCategoria");
-  const btnLancamento = document.getElementById("btnAdicionarLancamento");
-
-  // ================= DEBUG VISUAL =================
-  if (!btnLancamento || !btnCategoria) {
-      alert("ERRO: botões não encontrados. Verifique os IDs no HTML.");
-      return;
+function loadStorage() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  if (data) {
+    state = JSON.parse(data);
   }
+}
 
-  // ================= CATEGORIAS =================
-  btnCategoria.addEventListener("click", () => {
-      const input = document.getElementById("novaCategoria");
-      const nome = input.value.trim();
-
-      if (!nome) {
-          alert("Digite uma categoria");
-          return;
-      }
-
-      categorias.push(nome);
-      input.value = "";
-
-      atualizarCategorias();
+/*********************************
+ * UTILIDADES
+ *********************************/
+function formatCurrency(value) {
+  return value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
   });
+}
 
-  function atualizarCategorias() {
-      listaCategorias.innerHTML = "";
-      categoriaSelect.innerHTML = "<option value=''>Selecione</option>";
+function generateID() {
+  return Date.now().toString();
+}
 
-      categorias.forEach(cat => {
-          const li = document.createElement("li");
-          li.textContent = cat;
-          listaCategorias.appendChild(li);
+/*********************************
+ * DARK MODE
+ *********************************/
+const darkBtn = document.getElementById("toggleDarkMode");
 
-          const option = document.createElement("option");
-          option.value = cat;
-          option.textContent = cat;
-          categoriaSelect.appendChild(option);
-      });
-  }
+function applyDarkMode() {
+  document.body.classList.toggle("dark", state.darkMode);
+}
 
-  // ================= LANÇAMENTOS =================
-  btnLancamento.addEventListener("click", () => {
-      const descricao = document.getElementById("descricao").value.trim();
-      const valor = Number(document.getElementById("valor").value);
-      const data = document.getElementById("data").value;
-      const tipo = document.getElementById("tipo").value;
-      const categoria = categoriaSelect.value;
-      const parcelas = Number(document.getElementById("parcelas").value);
-
-      if (!descricao || !valor || !data || !categoria) {
-          alert("Preencha todos os campos");
-          return;
-      }
-
-      const valorParcela = valor / parcelas;
-      const dataBase = new Date(data);
-
-      for (let i = 0; i < parcelas; i++) {
-          const d = new Date(dataBase);
-          d.setMonth(dataBase.getMonth() + i);
-
-          lancamentos.push({
-              descricao: parcelas > 1 ? `${descricao} (${i + 1}/${parcelas})` : descricao,
-              valor: valorParcela,
-              data: d.toISOString().split("T")[0],
-              tipo,
-              categoria
-          });
-      }
-
-      limparFormulario();
-      atualizarFiltroAno();
-      atualizarLancamentos();
-      atualizarResumo();
-  });
-
-  function limparFormulario() {
-      document.getElementById("descricao").value = "";
-      document.getElementById("valor").value = "";
-      document.getElementById("data").value = "";
-      document.getElementById("parcelas").value = 1;
-  }
-
-  // ================= LISTA =================
-  function atualizarLancamentos() {
-      listaLancamentos.innerHTML = "";
-      const ano = filtroAno.value;
-
-      lancamentos
-          .filter(l => l.data.startsWith(ano))
-          .forEach(l => {
-              const li = document.createElement("li");
-              li.className = l.tipo === "entrada" ? "lancamento-entrada" : "lancamento-saida";
-              li.innerHTML = `
-                  <strong>${l.descricao}</strong><br>
-                  ${l.categoria} | ${l.data}<br>
-                  R$ ${l.valor.toFixed(2)}
-              `;
-              listaLancamentos.appendChild(li);
-          });
-  }
-
-  // ================= RESUMO =================
-  function atualizarResumo() {
-      const ano = filtroAno.value;
-      let entradas = 0;
-      let saidas = 0;
-
-      lancamentos
-          .filter(l => l.data.startsWith(ano))
-          .forEach(l => {
-              l.tipo === "entrada" ? entradas += l.valor : saidas += l.valor;
-          });
-
-      totalEntradasEl.textContent = entradas.toFixed(2);
-      totalSaidasEl.textContent = saidas.toFixed(2);
-      saldoFinalEl.textContent = (entradas - saidas).toFixed(2);
-  }
-
-  // ================= ANOS =================
-  function atualizarFiltroAno() {
-      const anos = [...new Set(lancamentos.map(l => l.data.substring(0, 4)))];
-      filtroAno.innerHTML = "";
-
-      anos.forEach(ano => {
-          const op = document.createElement("option");
-          op.value = ano;
-          op.textContent = ano;
-          filtroAno.appendChild(op);
-      });
-
-      filtroAno.value = anos[anos.length - 1];
-  }
-
-  filtroAno.addEventListener("change", () => {
-      atualizarLancamentos();
-      atualizarResumo();
-  });
-
-  // ================= INICIAL =================
-  const anoAtual = new Date().getFullYear();
-  filtroAno.innerHTML = `<option value="${anoAtual}">${anoAtual}</option>`;
-
+darkBtn.addEventListener("click", () => {
+  state.darkMode = !state.darkMode;
+  applyDarkMode();
+  saveStorage();
 });
+
+/*********************************
+ * CATEGORIAS
+ *********************************/
+const categoryForm = document.getElementById("categoryForm");
+const categoryNameInput = document.getElementById("categoryName");
+const categoryList = document.getElementById("categoryList");
+const categorySelect = document.getElementById("categorySelect");
+
+categoryForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = categoryNameInput.value.trim();
+  if (!name) return;
+
+  state.categories.push({
+    id: generateID(),
+    name
+  });
+
+  categoryNameInput.value = "";
+  saveStorage();
+  renderCategories();
+});
+
+function renderCategories() {
+  categoryList.innerHTML = "";
+  categorySelect.innerHTML = `<option value="">Categoria</option>`;
+
+  state.categories.forEach(cat => {
+    // Lista visual
+    const li = document.createElement("li");
+    li.textContent = cat.name;
+    categoryList.appendChild(li);
+
+    // Select
+    const option = document.createElement("option");
+    option.value = cat.id;
+    option.textContent = cat.name;
+    categorySelect.appendChild(option);
+  });
+}
+
+/*********************************
+ * LANÇAMENTOS
+ *********************************/
+const transactionForm = document.getElementById("transactionForm");
+const transactionTableBody = document.getElementById("transactionTableBody");
+
+transactionForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const description = document.getElementById("description").value.trim();
+  const amount = Number(document.getElementById("amount").value);
+  const type = document.getElementById("type").value;
+  const category = document.getElementById("categorySelect").value;
+  const date = document.getElementById("date").value;
+  const installments = Number(document.getElementById("installments").value);
+  const isRecurring = document.getElementById("isRecurring").checked;
+
+  if (!description || !amount || !type || !category || !date) return;
+
+  if (isRecurring) {
+    addRecurring(description, amount, type, category, date);
+  } else if (installments > 1) {
+    addInstallments(description, amount, type, category, date, installments);
+  } else {
+    addTransaction(description, amount, type, category, date);
+  }
+
+  transactionForm.reset();
+  saveStorage();
+  renderAll();
+});
+
+function addTransaction(desc, amt, type, cat, date) {
+  state.transactions.push({
+    id: generateID(),
+    description: desc,
+    amount: amt,
+    type,
+    category: cat,
+    date
+  });
+}
+
+function addInstallments(desc, amt, type, cat, date, installments) {
+  const installmentValue = amt / installments;
+  const startDate = new Date(date);
+
+  for (let i = 0; i < installments; i++) {
+    const d = new Date(startDate);
+    d.setMonth(d.getMonth() + i);
+
+    addTransaction(
+      `${desc} (${i + 1}/${installments})`,
+      installmentValue,
+      type,
+      cat,
+      d.toISOString().split("T")[0]
+    );
+  }
+}
+
+function addRecurring(desc, amt, type, cat, date) {
+  const start = new Date(date);
+
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(start);
+    d.setMonth(d.getMonth() + i);
+
+    addTransaction(
+      `${desc} (recorrente)`,
+      amt,
+      type,
+      cat,
+      d.toISOString().split("T")[0]
+    );
+  }
+}
+
+/*********************************
+ * TABELA
+ *********************************/
+function renderTransactions() {
+  transactionTableBody.innerHTML = "";
+
+  state.transactions.forEach(tx => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${tx.date}</td>
+      <td>${tx.description}</td>
+      <td>${getCategoryName(tx.category)}</td>
+      <td>${tx.type === "income" ? "Receita" : "Despesa"}</td>
+      <td>${formatCurrency(tx.amount)}</td>
+      <td>
+        <button class="action-btn delete" onclick="deleteTransaction('${tx.id}')">Excluir</button>
+      </td>
+    `;
+
+    transactionTableBody.appendChild(tr);
+  });
+}
+
+function deleteTransaction(id) {
+  state.transactions = state.transactions.filter(tx => tx.id !== id);
+  saveStorage();
+  renderAll();
+}
+
+function getCategoryName(id) {
+  const cat = state.categories.find(c => c.id === id);
+  return cat ? cat.name : "-";
+}
+
+/*********************************
+ * VISÃO GERAL
+ *********************************/
+function renderOverview() {
+  let income = 0;
+  let expense = 0;
+
+  state.transactions.forEach(tx => {
+    if (tx.type === "income") income += tx.amount;
+    else expense += tx.amount;
+  });
+
+  document.getElementById("totalIncome").textContent = formatCurrency(income);
+  document.getElementById("totalExpense").textContent = formatCurrency(expense);
+  document.getElementById("totalBalance").textContent = formatCurrency(income - expense);
+}
+
+/*********************************
+ * GRÁFICOS
+ *********************************/
+let categoryChart;
+let monthlyChart;
+
+function renderCharts() {
+  renderCategoryChart();
+  renderMonthlyChart();
+}
+
+function renderCategoryChart() {
+  const dataMap = {};
+
+  state.transactions
+    .filter(tx => tx.type === "expense")
+    .forEach(tx => {
+      const name = getCategoryName(tx.category);
+      dataMap[name] = (dataMap[name] || 0) + tx.amount;
+    });
+
+  const ctx = document.getElementById("categoryChart").getContext("2d");
+
+  if (categoryChart) categoryChart.destroy();
+
+  categoryChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: Object.keys(dataMap),
+      datasets: [{
+        data: Object.values(dataMap)
+      }]
+    }
+  });
+}
+
+function renderMonthlyChart() {
+  const months = Array(12).fill(0);
+
+  state.transactions.forEach(tx => {
+    const m = new Date(tx.date).getMonth();
+    months[m] += tx.type === "income" ? tx.amount : -tx.amount;
+  });
+
+  const ctx = document.getElementById("monthlyChart").getContext("2d");
+
+  if (monthlyChart) monthlyChart.destroy();
+
+  monthlyChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: [
+        "Jan","Fev","Mar","Abr","Mai","Jun",
+        "Jul","Ago","Set","Out","Nov","Dez"
+      ],
+      datasets: [{
+        label: "Saldo Mensal",
+        data: months
+      }]
+    }
+  });
+}
+
+/*********************************
+ * RENDER GERAL
+ *********************************/
+function renderAll() {
+  renderCategories();
+  renderTransactions();
+  renderOverview();
+  renderCharts();
+}
+
+/*********************************
+ * INIT
+ *********************************/
+loadStorage();
+applyDarkMode();
+renderAll();

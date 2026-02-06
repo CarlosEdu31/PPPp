@@ -1,193 +1,231 @@
-/* ================= RESET ================= */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ================= BODY ================= */
+/* VARIÁVEIS */
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #222;
+  --primary: #4f46e5;
+  --income: #16a34a;
+  --expense: #dc2626;
+  --border: #e5e7eb;
+}
+
+/* DARK MODE */
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e5e7eb;
+  --border: #334155;
+}
+
+/* BODY */
 body {
-  background: #f4f6f9;
-  color: #333;
-  padding: 30px;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
 }
 
-/* ================= TITULOS ================= */
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2.4rem;
-  color: #2c3e50;
-}
-
-h2 {
-  margin-bottom: 15px;
-  font-size: 1.4rem;
-  color: #34495e;
-}
-
-/* ================= SECTIONS (CARDS) ================= */
-section {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-}
-
-/* ================= VISÃO GERAL ================= */
-#visaoGeral {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-#visaoGeral select {
-  width: 120px;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-/* ================= RESUMO ================= */
-.resumo {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.resumo p {
-  background: linear-gradient(135deg, #f8f9fb, #eef1f5);
-  padding: 20px;
-  border-radius: 14px;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.resumo span {
-  display: block;
-  margin-top: 10px;
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-
-#totalEntradas {
-  color: #2ecc71;
-}
-
-#totalSaidas {
-  color: #e74c3c;
-}
-
-#saldoFinal {
-  color: #3498db;
-}
-
-/* ================= GRAFICOS ================= */
-#graficos canvas {
-  max-width: 100%;
-  margin-top: 20px;
-}
-
-/* ================= INPUTS & SELECT ================= */
-input,
-select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-}
-
-input:focus,
-select:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-/* ================= BOTÕES ================= */
-button {
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(52, 152, 219, 0.35);
-}
-
-/* ================= CATEGORIAS ================= */
-#categorias input {
-  margin-bottom: 10px;
-}
-
-#listaCategorias {
-  list-style: none;
-  margin-top: 15px;
-}
-
-#listaCategorias li {
-  background: #f1f3f6;
-  padding: 10px 15px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-}
-
-/* ================= NOVO LANÇAMENTO ================= */
-#novoLancamento {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-}
-
-#novoLancamento button {
-  grid-column: 1 / -1;
-  margin-top: 10px;
-}
-
-/* ================= LANÇAMENTOS ================= */
-#listaLancamentos {
-  list-style: none;
-  margin-top: 15px;
-}
-
-#listaLancamentos li {
-  background: #f9fafc;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 10px;
+/* HEADER */
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.95rem;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.04);
+  padding: 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
 }
 
-.lancamento-entrada {
-  border-left: 6px solid #2ecc71;
+.header h1 {
+  font-size: 1.6rem;
 }
 
-.lancamento-saida {
-  border-left: 6px solid #e74c3c;
+.header-actions {
+  display: flex;
+  gap: 10px;
 }
 
-/* ================= RESPONSIVO ================= */
-@media (max-width: 768px) {
-  .resumo {
-      grid-template-columns: 1fr;
+/* BUTTONS */
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* SELECT / INPUT */
+input,
+select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+
+/* VISÃO GERAL */
+.overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.card.income p {
+  color: var(--income);
+}
+
+.card.expense p {
+  color: var(--expense);
+}
+
+/* GRÁFICOS */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.chart-card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* CATEGORIAS */
+.categories {
+  padding: 20px;
+}
+
+.categories form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+#categoryList {
+  list-style: none;
+}
+
+#categoryList li {
+  background: var(--card);
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LANÇAMENTOS */
+.transactions {
+  padding: 20px;
+}
+
+.transactions form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.checkbox-group,
+.installments {
+  grid-column: span 2;
+}
+
+/* TABELA */
+.transaction-list {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background: var(--primary);
+  color: #fff;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(0,0,0,0.03);
+}
+
+body.dark tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.05);
+}
+
+/* AÇÕES */
+.action-btn {
+  margin: 0 4px;
+  padding: 5px 8px;
+  font-size: 0.8rem;
+}
+
+.edit {
+  background: #f59e0b;
+}
+
+.delete {
+  background: #dc2626;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* RESPONSIVO */
+@media (max-width: 600px) {
+  .transactions form {
+    grid-template-columns: 1fr;
   }
 
-  body {
-      padding: 15px;
+  .checkbox-group,
+  .installments {
+    grid-column: span 1;
   }
 }

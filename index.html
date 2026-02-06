@@ -1,82 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Controle Financeiro</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle Financeiro</title>
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 
-    <!-- CSS (vamos melhorar depois) -->
-    <link rel="stylesheet" href="style.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <h1>Controle de Gastos</h1>
+  <!-- HEADER -->
+  <header class="header">
+    <h1>💰 Controle Financeiro</h1>
 
-    <!-- ================= VISÃO GERAL ================= -->
-    <section id="visaoGeral">
-        <h2>Visão Geral</h2>
+    <div class="header-actions">
+      <select id="filterYear"></select>
 
-        <label for="filtroAno">Ano:</label>
-        <select id="filtroAno"></select>
+      <button id="toggleDarkMode">
+        🌙 Dark Mode
+      </button>
+    </div>
+  </header>
 
-        <div class="resumo">
-            <p>Entradas: R$ <span id="totalEntradas">0,00</span></p>
-            <p>Saídas: R$ <span id="totalSaidas">0,00</span></p>
-            <p>Saldo: R$ <span id="saldoFinal">0,00</span></p>
-        </div>
-    </section>
+  <!-- VISÃO GERAL -->
+  <section class="overview">
+    <div class="card income">
+      <h3>Receitas</h3>
+      <p id="totalIncome">R$ 0,00</p>
+    </div>
 
-    <!-- ================= GRÁFICOS ================= -->
-    <section id="graficos">
-        <h2>Gráficos</h2>
+    <div class="card expense">
+      <h3>Despesas</h3>
+      <p id="totalExpense">R$ 0,00</p>
+    </div>
 
-        <canvas id="graficoCategorias"></canvas>
-        <br>
-        <canvas id="graficoMensal"></canvas>
-    </section>
+    <div class="card balance">
+      <h3>Saldo</h3>
+      <p id="totalBalance">R$ 0,00</p>
+    </div>
+  </section>
 
-    <!-- ================= CATEGORIAS ================= -->
-    <section id="categorias">
-        <h2>Categorias</h2>
+  <!-- GRÁFICOS -->
+  <section class="charts">
+    <div class="chart-card">
+      <h3>Despesas por Categoria</h3>
+      <canvas id="categoryChart"></canvas>
+    </div>
 
-        <input type="text" id="novaCategoria" placeholder="Nova categoria">
-        <button id="btnAdicionarCategoria">Adicionar</button>
+    <div class="chart-card">
+      <h3>Evolução Mensal</h3>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+  </section>
 
-        <ul id="listaCategorias"></ul>
-    </section>
+  <!-- CATEGORIAS -->
+  <section class="categories">
+    <h2>Categorias</h2>
 
-    <!-- ================= NOVO LANÇAMENTO ================= -->
-    <section id="novoLancamento">
-        <h2>Novo Lançamento</h2>
+    <form id="categoryForm">
+      <input 
+        type="text" 
+        id="categoryName" 
+        placeholder="Nome da categoria" 
+        required
+      />
+      <button type="submit">Adicionar</button>
+    </form>
 
-        <input type="text" id="descricao" placeholder="Descrição">
+    <ul id="categoryList"></ul>
+  </section>
 
-        <input type="number" id="valor" placeholder="Valor">
+  <!-- NOVO LANÇAMENTO -->
+  <section class="transactions">
+    <h2>Novo Lançamento</h2>
 
-        <input type="date" id="data">
+    <form id="transactionForm">
 
-        <select id="tipo">
-            <option value="entrada">Entrada</option>
-            <option value="saida">Saída</option>
-        </select>
+      <input type="text" id="description" placeholder="Descrição" required />
 
-        <select id="categoriaLancamento"></select>
+      <input type="number" id="amount" placeholder="Valor" required />
 
-        <label>Parcelas:</label>
-        <input type="number" id="parcelas" value="1" min="1">
+      <select id="type" required>
+        <option value="">Tipo</option>
+        <option value="income">Receita</option>
+        <option value="expense">Despesa</option>
+      </select>
 
-        <button id="btnAdicionarLancamento">Adicionar Lançamento</button>
-    </section>
+      <select id="categorySelect" required>
+        <option value="">Categoria</option>
+      </select>
 
-    <!-- ================= LISTA DE LANÇAMENTOS ================= -->
-    <section id="lancamentos">
-        <h2>Lançamentos</h2>
-        <ul id="listaLancamentos"></ul>
-    </section>
+      <input type="date" id="date" required />
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+      <!-- RECORRÊNCIA -->
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="isRecurring">
+          Recorrente (mensal)
+        </label>
+      </div>
+
+      <!-- PARCELAMENTO -->
+      <div class="installments">
+        <label>Parcelas</label>
+        <input 
+          type="number" 
+          id="installments" 
+          min="1" 
+          value="1"
+        />
+      </div>
+
+      <button type="submit">Adicionar Lançamento</button>
+    </form>
+  </section>
+
+  <!-- LISTA DE LANÇAMENTOS -->
+  <section class="transaction-list">
+    <h2>Lançamentos</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Descrição</th>
+          <th>Categoria</th>
+          <th>Tipo</th>
+          <th>Valor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody id="transactionTableBody">
+        <!-- JS insere aqui -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>📊 Controle Financeiro • LocalStorage • GitHub Pages</p>
+  </footer>
+
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
 </html>
