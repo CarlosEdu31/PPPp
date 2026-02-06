@@ -1,69 +1,141 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Trilha do Expossoma</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Controle Financeiro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS será conectado depois -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Trilha do Expossoma: Desafio em Dupla!</h1>
 
-    <div id="start-screen">
-      <input type="text" id="player1-name" placeholder="Nome do Jogador 1">
-      <input type="text" id="player2-name" placeholder="Nome do Jogador 2">
-      <button id="start-btn">Começar Jogo</button>
-    </div>
+    <!-- HEADER -->
+    <header>
+        <h1>Controle Financeiro</h1>
+        <p>Gerencie seus gastos e receitas</p>
+    </header>
 
-    <div id="game-screen" class="hidden">
-      <h2 id="turn-indicator">Vez de: Jogador</h2>
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="container">
 
-      <div id="cards-container">
-        <div class="card" id="option1" onclick="chooseOption(0)">
-          <h3 class="card-title"></h3>
-          <p class="card-description"></p>
-        </div>
-        <div class="card" id="option2" onclick="chooseOption(1)">
-          <h3 class="card-title"></h3>
-          <p class="card-description"></p>
-        </div>
-      </div>
+        <!-- RESUMO FINANCEIRO -->
+        <section class="resumo">
+            <div class="card">
+                <h3>Receitas</h3>
+                <p id="total-receitas">R$ 0,00</p>
+            </div>
 
-      <div id="explanation-box" class="hidden">
-        <p id="explanation-text"></p>
-        <button onclick="nextTurn()">Próxima Rodada</button>
-      </div>
+            <div class="card">
+                <h3>Despesas</h3>
+                <p id="total-despesas">R$ 0,00</p>
+            </div>
 
-      <div class="trails">
-        <div class="trail-container">
-          <h3 id="trail-name-1"></h3>
-          <div class="trail" id="trail1"></div>
-        </div>
-        <div class="trail-container">
-          <h3 id="trail-name-2"></h3>
-          <div class="trail" id="trail2"></div>
-        </div>
-      </div>
-    </div>
+            <div class="card saldo">
+                <h3>Saldo</h3>
+                <p id="saldo-total">R$ 0,00</p>
+            </div>
+        </section>
 
-    <div id="end-screen" class="hidden">
-      <h2>Fim do Jogo!</h2>
-      <p id="result-text"></p>
-      <div class="final-trails">
-        <div>
-          <h4 id="final-name-1"></h4>
-          <div id="final-trail-1"></div>
-        </div>
-        <div>
-          <h4 id="final-name-2"></h4>
-          <div id="final-trail-2"></div>
-        </div>
-      </div>
-      <button onclick="location.reload()">Jogar Novamente</button>
-    </div>
-  </div>
+        <!-- FORMULÁRIO DE LANÇAMENTO -->
+        <section class="formulario">
+            <h2>Novo Lançamento</h2>
 
-  <script src="script.js"></script>
+            <form id="form-lancamento">
+                <label>
+                    Tipo
+                    <select id="tipo">
+                        <option value="receita">Receita</option>
+                        <option value="despesa">Despesa</option>
+                    </select>
+                </label>
+
+                <label>
+                    Descrição
+                    <input type="text" id="descricao" placeholder="Ex: Aluguel, Salário" required>
+                </label>
+
+                <label>
+                    Categoria
+                    <select id="categoria">
+                        <option value="Alimentação">Alimentação</option>
+                        <option value="Moradia">Moradia</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Lazer">Lazer</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </label>
+
+                <label>
+                    Valor
+                    <input type="number" id="valor" step="0.01" required>
+                </label>
+
+                <label>
+                    Data
+                    <input type="date" id="data" required>
+                </label>
+
+                <button type="submit">Adicionar</button>
+            </form>
+        </section>
+
+        <!-- TABELA DE LANÇAMENTOS -->
+        <section class="tabela">
+            <h2>Lançamentos</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-lancamentos">
+                    <!-- JS vai inserir os dados aqui -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- GRÁFICOS -->
+        <section class="graficos">
+            <h2>Visão Geral</h2>
+            <div class="grafico">
+                <canvas id="grafico-categorias"></canvas>
+            </div>
+            <div class="grafico">
+                <canvas id="grafico-mensal"></canvas>
+            </div>
+        </section>
+
+        <!-- METAS FINANCEIRAS -->
+        <section class="metas">
+            <h2>Metas Financeiras</h2>
+
+            <form id="form-meta">
+                <input type="text" id="meta-descricao" placeholder="Ex: Economizar para viagem">
+                <input type="number" id="meta-valor" placeholder="Valor da meta">
+                <button type="submit">Adicionar Meta</button>
+            </form>
+
+            <ul id="lista-metas">
+                <!-- JS vai preencher -->
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 - Controle Financeiro Pessoal</p>
+    </footer>
+
+    <!-- JS será conectado depois -->
+    <script src="script.js"></script>
+
 </body>
 </html>
