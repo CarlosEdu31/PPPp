@@ -1,3 +1,6 @@
+alert("JS carregado");
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // ================= DADOS =================
